@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SimpleCalc</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+</head>
+<body>
+    <div class="calculator">
+        <div class="display">
+            <span id="expression" aria-label="Current expression"></span>
+            <span id="result" aria-label="Result"></span>
+        </div>
+        <div class="buttons-grid">
+            <!-- Row 1 -->
+            <button data-key="AC" aria-label="All Clear">AC</button>
+            <button data-key="C" aria-label="Clear">C</button>
+            <button data-key="%" aria-label="Percent">%</button>
+            <button data-key="/" aria-label="Divide">÷</button>
+            <!-- Row 2 -->
+            <button data-key="7" aria-label="Seven">7</button>
+            <button data-key="8" aria-label="Eight">8</button>
+            <button data-key="9" aria-label="Nine">9</button>
+            <button data-key="*" aria-label="Multiply">×</button>
+            <!-- Row 3 -->
+            <button data-key="4" aria-label="Four">4</button>
+            <button data-key="5" aria-label="Five">5</button>
+            <button data-key="6" aria-label="Six">6</button>
+            <button data-key="-" aria-label="Subtract">-</button>
+            <!-- Row 4 -->
+            <button data-key="1" aria-label="One">1</button>
+            <button data-key="2" aria-label="Two">2</button>
+            <button data-key="3" aria-label="Three">3</button>
+            <button data-key="+" aria-label="Add">+</button>
+            <!-- Row 5 -->
+            <button data-key="0" aria-label="Zero" class="zero">0</button>
+            <button data-key="." aria-label="Decimal point">.</button>
+            <button data-key="=" aria-label="Equals">=</button>
+        </div>
+    </div>
+</body>
+</html>
