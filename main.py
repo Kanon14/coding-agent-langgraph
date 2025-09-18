@@ -30,3 +30,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+    # if __name__ == "__main__":
+#     result = agent.invoke({"user_prompt": "create a simple calculator web application"},
+#                           {"recursion_limit": 100})
+#     print("Final State:", result)
