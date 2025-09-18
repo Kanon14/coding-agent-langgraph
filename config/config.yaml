@@ -1,0 +1,7 @@
+llm:
+  openai:
+    provider: "openai"
+    model_name: "gpt-oss-120b"
+  groq:
+    provider: "groq"
+    model_name: "openai/gpt-oss-120b"
