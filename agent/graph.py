@@ -7,9 +7,9 @@ from langgraph.graph import StateGraph, END, START
 from langgraph.prebuilt import create_react_agent
 
 from utils.model_loader import ModelLoader
-from states import Plan, TaskPlan, CoderState
-from prompts import planner_prompt, architect_prompt, coder_system_prompt
-from tools import write_file, read_file, get_current_directory, list_files
+from agent.states import Plan, TaskPlan, CoderState
+from agent.prompts import planner_prompt, architect_prompt, coder_system_prompt
+from agent.tools import write_file, read_file, get_current_directory, list_files
 
 
 class BuildState(TypedDict, total=False):
@@ -77,7 +77,7 @@ class GraphBuilder():
         """Tool-using coder agent that iterates through implementation steps."""
         coder_state: Optional[CoderState] = state.get("coder_state")
         if coder_state is None: # Initially the state will be None
-            task_plan = Optional[TaskPlan] = state.get("task_plan")
+            task_plan: Optional[TaskPlan] = state.get("task_plan")
             if task_plan is None:
                 raise ValueError("coder_agent expected 'task_plan' in state.")
             coder_state = CoderState(task_plan=task_plan, current_step_idx=0)
@@ -160,4 +160,4 @@ class GraphBuilder():
         
     
     def __call__(self):
-        return self.build_graph()
+        return self.build_graph()  

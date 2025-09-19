@@ -1,0 +1,231 @@
+/*
+ * style.css – Base styling for TodoApp UI
+ * Implements CSS variables, layout, component styles, and responsive design.
+ */
+
+/* ---------------------------------------------------------------
+ * CSS Variables – colors & spacing (easy theming)
+ * --------------------------------------------------------------- */
+:root {
+  /* Color palette */
+  --color-primary: #2c3e50;        /* Header background */
+  --color-bg: #f5f7fa;            /* Page background */
+  --color-text: #333333;          /* Primary text */
+  --color-accent: #3498db;        /* Buttons, active filters */
+  --color-muted: #e0e0e0;         /* Borders, inactive buttons */
+  --color-success: #27ae60;       /* Completed tasks */
+  --color-danger: #e74c3c;        /* Delete button (if any) */
+
+  /* Spacing scale */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+
+  /* Border radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+}
+
+/* ---------------------------------------------------------------
+ * Global reset & base styles
+ * --------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.5;
+  padding: var(--spacing-md);
+}
+
+h1 {
+  font-size: 1.75rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+/* ---------------------------------------------------------------
+ * Header
+ * --------------------------------------------------------------- */
+header {
+  background-color: var(--color-primary);
+  color: var(--color-bg);
+  padding: var(--spacing-md);
+  text-align: center;
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* ---------------------------------------------------------------
+ * Form – Add new task
+ * --------------------------------------------------------------- */
+#task-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  background: #fff;
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-muted);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+#task-form > div {
+  display: flex;
+  flex-direction: column;
+}
+
+#task-form label {
+  margin-bottom: var(--spacing-xs);
+  font-weight: 600;
+}
+
+#task-form input,
+#task-form textarea {
+  padding: var(--spacing-sm);
+  border: 1px solid var(--color-muted);
+  border-radius: var(--radius-sm);
+  font: inherit;
+  resize: vertical;
+}
+
+#task-form button {
+  align-self: flex-start;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* ---------------------------------------------------------------
+ * Filter Buttons
+ * --------------------------------------------------------------- */
+#filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  justify-content: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+#filters button {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: var(--color-muted);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+#filters button.filter-active {
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+/* ---------------------------------------------------------------
+ * Task List
+ * --------------------------------------------------------------- */
+#task-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: #fff;
+  border: 1px solid var(--color-muted);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+.task-item .title {
+  font-weight: 600;
+}
+
+.task-item .description {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.task-item.completed .title,
+.task-item.completed .description {
+  text-decoration: line-through;
+  opacity: 0.6;
+  color: var(--color-success);
+}
+
+.task-item button {
+  background: none;
+  border: none;
+  color: var(--color-danger);
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+/* ---------------------------------------------------------------
+ * Focus outlines – accessibility
+ * --------------------------------------------------------------- */
+button:focus,
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* ---------------------------------------------------------------
+ * Responsive Layout
+ * --------------------------------------------------------------- */
+@media (min-width: 600px) {
+  /* Desktop – form fields side‑by‑side */
+  #task-form {
+    flex-direction: row;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  #task-form > div {
+    flex: 1 1 45%;
+    margin-right: var(--spacing-sm);
+  }
+
+  #task-form > div:last-child {
+    flex-basis: 100%;
+    margin-top: var(--spacing-sm);
+  }
+
+  #task-form button {
+    margin-top: var(--spacing-sm);
+  }
+
+  /* Desktop – filter bar horizontal (already flex) */
+  #filters {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 599px) {
+  /* Mobile – stack everything (default) */
+  #task-form button {
+    width: 100%;
+  }
+}

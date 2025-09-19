@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TodoApp</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>TodoApp</h1>
+    </header>
+
+    <main>
+        <!-- Task input form -->
+        <form role="form" aria-label="Add new task" id="task-form">
+            <div>
+                <label for="task-title">Task Title</label>
+                <input type="text" id="task-title" name="title" placeholder="Enter task title" required>
+            </div>
+            <div>
+                <label for="task-desc">Description (optional)</label>
+                <textarea id="task-desc" name="description" placeholder="Enter task description"></textarea>
+            </div>
+            <button type="submit">Add Task</button>
+        </form>
+
+        <!-- Filter buttons -->
+        <section id="filters">
+            <button type="button" data-filter="all">All</button>
+            <button type="button" data-filter="active">Active</button>
+            <button type="button" data-filter="completed">Completed</button>
+        </section>
+
+        <!-- Task list -->
+        <ul id="task-list" role="list"></ul>
+    </main>
+
+    <footer>
+        <p>© 2025 TodoApp. Built with ❤️.</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

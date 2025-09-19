@@ -1,36 +1,82 @@
-import argparse
-import sys
-import traceback
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from starlette.responses import FileResponse
+from pydantic import BaseModel
+from typing import Any, Dict
 
-from agent.graph import agent
+from agent.graph import GraphBuilder
 
 
-def main():
-    parser = argparse.ArgumentParser(description="Run coding project planner")
-    parser.add_argument("--recursion-limit", "-r", type=int, default=100,
-                        help="Recursion limit for processing (default: 100)")
+app = FastAPI(title="Coding Agent", version="1.0.0")
 
-    args = parser.parse_args()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # set specific origins in prod
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+class PromptRequest(BaseModel):
+    prompt: str
     
+
+def _serialize(obj: Any) -> Any:
+    """Make LangGraph/LangChain/Pydantic objects JSON-serializable for responses."""
+    if hasattr(obj, "model_dump"):  # Pydantic v2 models
+        return obj.model_dump()
+    if isinstance(obj, dict):
+        return {k: _serialize(v) for k, v in obj.items()}
+    if isinstance(obj, (list, tuple)):
+        return [_serialize(v) for v in obj]
     try:
-        user_prompt = input("Enter your project prompt: ")
-        result = agent.invoke(
+        _ = obj.__dict__
+        return str(obj)
+    except Exception:
+        return obj
+    
+
+# ----- Startup: init tools folder and compile graph once -----
+_builder = GraphBuilder(model_provider="groq", enable_debug=True, enable_verbose=True)
+_react_app = _builder()  # same as _builder.build_graph()
+
+
+@app.get("/health")
+def health() -> Dict[str, bool]:
+    return {"ok": True}
+
+    
+@app.post("/prompt")
+async def coding_agent(request: PromptRequest):
+    user_prompt = request.prompt.strip()
+    if not user_prompt:
+        raise HTTPException(status_code=400, detail="prompt must be a non-empty string")
+
+    try:
+        final_state = _react_app.invoke(
             {"user_prompt": user_prompt},
-            {"recursion_limit": args.recursion_limit}
+            config={"recursion_limit": 100},
         )
-        print("Final State:", result)
-    except KeyboardInterrupt:
-        print("\nOperation cancelled by user.")
-        sys.exit(0)
+        return _serialize(final_state)
     except Exception as e:
-        traceback.print_exc()
-        print(f"Error: {e}", file=sys.stderr)
-        sys.exit(1)
-        
+        raise HTTPException(status_code=500, detail=f"Agent error: {e}")
+
+
+@app.get("/graph.png")
+def get_graph_png():
+    """Optional: render and return the graph as a PNG."""
+    try:
+        png_bytes = _react_app.get_graph().draw_mermaid_png()
+        path = "my_graph.png"
+        with open(path, "wb") as f:
+            f.write(png_bytes)
+        return FileResponse(path, media_type="image/png", filename="my_graph.png")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Unable to render graph PNG: {e}")
+    
 
 if __name__ == "__main__":
-    main()
-    # if __name__ == "__main__":
-#     result = agent.invoke({"user_prompt": "create a simple calculator web application"},
-#                           {"recursion_limit": 100})
-#     print("Final State:", result)
+    import uvicorn
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
